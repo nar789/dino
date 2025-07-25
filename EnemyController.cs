@@ -92,30 +92,33 @@ public class EnemyController : MonoBehaviour
 
     public void hit(int attackPower)
     {
+        int skill = 0;
+        if(SkillController.Instance.getSkill(1))
+        {
+            skill = 1;
+            attackPower *= 3;
+        }
+
         if (slider.value - attackPower <= 0)
         {
             slider.value = 0;
+            StartCoroutine(startAttackFx(skill));
             StartCoroutine(dieEnemy());
             return;
         } else
         {
             slider.value -= attackPower;
-            StartCoroutine(startAttackFx());
+            StartCoroutine(startAttackFx(skill));
         }
     }
 
-    IEnumerator startAttackFx()
+    IEnumerator startAttackFx(int skill)
     {
         yield return new WaitForSeconds(0.5f);
-        float dist = Vector3.Distance(transform.position, charTransform.position);
-        //Debug.Log("dist " + dist);
-        if (dist  < 3)
-        {
-            int idx = Random.Range(0, attackFx.Length);
-            GameObject attack = Instantiate(attackFx[idx], attackTarget.position, attackTarget.rotation);
-            yield return new WaitForSeconds(1);
-            Destroy(attack);
-        }
+        GameObject attack = Instantiate(attackFx[skill], attackTarget.position, attackTarget.rotation);
+        SkillController.Instance.clearSkill(skill);
+        yield return new WaitForSeconds(1);
+        Destroy(attack);
     }
 
     IEnumerator dieEnemy()

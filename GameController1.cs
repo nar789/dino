@@ -17,15 +17,9 @@ public class GameController1 : MonoBehaviour
     {
         charController = GameObject.Find("Char").GetComponent<CharController>();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void onSkillClick(int id)
     {
         Debug.Log("skill " + id);
+        SkillController.Instance.setSkill(id);
     }
 }
