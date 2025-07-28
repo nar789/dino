@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.AI;
 using DG.Tweening;
+using System.Collections.Generic;
 
 public class EnemyController : MonoBehaviour
 {
@@ -25,8 +26,10 @@ public class EnemyController : MonoBehaviour
     public Transform charTransform;
 
     NavMeshAgent agent;
-
+    
     public GameObject coinPrefab;
+
+    public List<GameObject> fxObj = new List<GameObject>();
 
     void Start()
     {
@@ -116,9 +119,10 @@ public class EnemyController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         GameObject attack = Instantiate(attackFx[skill], attackTarget.position, attackTarget.rotation);
+        fxObj.Add(attack);
         SkillController.Instance.clearSkill(skill);
         yield return new WaitForSeconds(1);
-        Destroy(attack);
+        DestroyImmediate(attack);
     }
 
     IEnumerator dieEnemy()
@@ -126,12 +130,19 @@ public class EnemyController : MonoBehaviour
         initAnimation();
         animator.SetBool(dieHash, true);
         yield return new WaitForSeconds(3);
-        Destroy(gameObject);
         GameObject coin = Instantiate(coinPrefab, transform.position, transform.rotation);
         coin.layer = 6;
         coin.tag = "coin1";
         coin.transform.DOJump(transform.position, 5, 1, 0.2f);
-        
+        StopAllCoroutines();
+        Destroy(gameObject);
+        foreach (GameObject obj in fxObj)
+        {
+            if(obj != null)
+            {
+                DestroyImmediate(obj);
+            }
+        }
     }
 
     public int getAttackPower()

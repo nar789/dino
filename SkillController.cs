@@ -6,6 +6,8 @@ public class SkillController : MonoBehaviour
 
     public static SkillController Instance;
 
+    public GameObject magic;
+
     bool[] skillStatus = { false, false, false, false };
     private void Awake()
     {
@@ -26,6 +28,11 @@ public class SkillController : MonoBehaviour
     public void setSkill(int idx)
     {
         skillStatus[idx] = true;
+    }
+
+    public void generateMagic(Vector3 pos, Quaternion rot)
+    {
+        Instantiate(magic, pos, rot);
     }
 
 }

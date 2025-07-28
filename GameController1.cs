@@ -20,6 +20,16 @@ public class GameController1 : MonoBehaviour
     public void onSkillClick(int id)
     {
         Debug.Log("skill " + id);
-        SkillController.Instance.setSkill(id);
+        if (id == 2)
+        {
+            Vector3 dest = charController.transform.position + Vector3.zero;
+            dest.y = 0.5f;
+            SkillController.Instance.generateMagic(dest, charController.transform.rotation);
+        } else
+        {
+            SkillController.Instance.setSkill(id);
+        }
+        
+        
     }
 }
