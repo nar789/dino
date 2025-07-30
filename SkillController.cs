@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SkillController : MonoBehaviour
 {
@@ -7,6 +8,10 @@ public class SkillController : MonoBehaviour
     public static SkillController Instance;
 
     public GameObject magic;
+    public GameObject explosion;
+
+    bool isAuto = true;
+    public Image autoButtonImage;
 
     bool[] skillStatus = { false, false, false, false };
     private void Awake()
@@ -34,5 +39,31 @@ public class SkillController : MonoBehaviour
     {
         Instantiate(magic, pos, rot);
     }
+
+    public void generateExplosion(Vector3 pos, Quaternion rot)
+    {
+        Instantiate(explosion, pos, rot);
+    }
+
+    public void setAuto(bool auto)
+    {
+        isAuto = auto;
+
+        if(isAuto)
+        {
+            autoButtonImage.color = new Color32(255, 255, 255, 255);
+        } else
+        {
+            autoButtonImage.color = new Color32(0, 0, 0, 200);
+        }
+
+    }
+
+    public bool getIsAuto()
+    {
+        return isAuto;
+    }
+
+
 
 }

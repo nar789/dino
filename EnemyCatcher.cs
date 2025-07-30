@@ -71,6 +71,12 @@ public class EnemyCatcher : MonoBehaviour
 
     public void attackAndHit(EnemyController enemy, int attackPower)
     {
+        if(SkillController.Instance.getIsAuto())
+        {
+            GameController1.Instance.onSkillClick(1);
+            GameController1.Instance.onSkillClick(2);
+            GameController1.Instance.onSkillClick(3);
+        }
         charController.attack(stopPlaying);
         enemy.hit(attackPower);
     }
