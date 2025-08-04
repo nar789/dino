@@ -17,7 +17,6 @@ public class CharController : MonoBehaviour
     int level = 0;
 
     public Slider slider;
-    int hp = 100;
 
 
     Animator animator;
@@ -34,12 +33,14 @@ public class CharController : MonoBehaviour
     Rigidbody rb;
 
     public Transform coinTarget;
-    
+
+    public GameObject levelUpFx;
+    public GameObject levelUpFx2;
+
 
     void Start()
     {
-        slider.maxValue = hp;
-        slider.value = hp;
+        
         animator = GetComponent<Animator>();
 
         isHitHash = Animator.StringToHash("isHit");
@@ -50,6 +51,12 @@ public class CharController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
 
+    }
+
+    public void initHp(int capa, int cur)
+    {
+        slider.maxValue = capa;
+        slider.value = cur;
     }
 
 
@@ -133,7 +140,7 @@ public class CharController : MonoBehaviour
 
     IEnumerator startAttackAnimation(EnemyCatcher.StateUpdater updater)
     {
-        Debug.Log("attack!");
+        //Debug.Log("attack!");
         initAnimation();
         animator.SetBool(isAttackHash, true);
         yield return new WaitForSeconds(0.575f);
@@ -156,7 +163,8 @@ public class CharController : MonoBehaviour
 
     public void hit(int attackPower)
     {
-        Debug.Log("hit " + attackPower);
+        //Debug.Log("hit " + attackPower);
+        MyProfile.Instance.updateHp(attackPower);
         if (slider.value - attackPower <= 0)
         {
             slider.value = 0;
@@ -193,6 +201,20 @@ public class CharController : MonoBehaviour
     public Transform getCoinTarget()
     {
         return coinTarget;
+    }
+
+    public void startLevelUpFx()
+    {
+        StartCoroutine(playLevelUpFx());
+    }
+
+    IEnumerator playLevelUpFx()
+    {
+        GameObject fx = Instantiate(levelUpFx, transform.position, transform.rotation);
+        GameObject fx2 = Instantiate(levelUpFx2, transform.position, transform.rotation);
+        yield return new WaitForSeconds(2);
+        DestroyImmediate(fx);
+        DestroyImmediate(fx2);
     }
 
 }

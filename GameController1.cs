@@ -28,7 +28,7 @@ public class GameController1 : MonoBehaviour
        
         if (iconController.coolSkill(id - 1))
         {
-            Debug.Log("skill " + id);
+            //Debug.Log("skill " + id);
             if (id == 3)
             {
                 SkillController.Instance.generateExplosion(charController.transform.position, charController.transform.rotation);

@@ -55,8 +55,12 @@ public class CoinCatcher : MonoBehaviour
         {
             if (other.tag == "area")
             {
-                GameObject obj = storage.Dequeue();
-                obj.GetComponent<CoinController>().pay(other.gameObject.transform.position);
+                MissionFloor floor = other.gameObject.GetComponent<MissionFloor>();
+                if (floor.pay())
+                {
+                    GameObject obj = storage.Dequeue();
+                    obj.GetComponent<CoinController>().pay(other.gameObject.transform.position);
+                }                
             }
         }
     }

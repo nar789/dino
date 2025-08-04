@@ -11,7 +11,7 @@ public class EnemyController : MonoBehaviour
       
     public Slider slider;
     int hp = 100;
-    int attackPower = 0;
+    int attackPower = 1;
 
     Animator animator;
     int attackHash;
@@ -95,6 +95,12 @@ public class EnemyController : MonoBehaviour
 
     public void hit(int attackPower)
     {
+        if (slider.value <= 0)
+        {
+            return;
+        }
+
+
         int skill = 0;
         if(SkillController.Instance.getSkill(1))
         {
@@ -115,6 +121,25 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    public void hitRemote(int attackPower)
+    {
+        if(slider.value <= 0)
+        {
+            return;
+        }
+
+        if (slider.value - attackPower <= 0)
+        {
+            slider.value = 0;
+            StartCoroutine(dieEnemy());
+            return;
+        }
+        else
+        {
+            slider.value -= attackPower;
+        }
+    }
+
     IEnumerator startAttackFx(int skill)
     {
         yield return new WaitForSeconds(0.5f);
@@ -127,6 +152,7 @@ public class EnemyController : MonoBehaviour
 
     IEnumerator dieEnemy()
     {
+        MyProfile.Instance.updateExp();
         initAnimation();
         animator.SetBool(dieHash, true);
         yield return new WaitForSeconds(3);
