@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Video;
 
 public class GameController1 : MonoBehaviour
 {
@@ -12,6 +13,20 @@ public class GameController1 : MonoBehaviour
 
     public static GameController1 Instance;
 
+    public GameObject[] panels;
+
+    public VideoPlayer videoPlayer;
+    public VideoClip[] clips;
+    public GameObject godViewer;
+
+
+    bool isPlaying = false;
+
+    //Stat UI Panel
+    public TMPro.TextMeshProUGUI statPointText;
+    public TMPro.TextMeshProUGUI diaText;
+
+    //
 
     private void Awake()
     {
@@ -22,6 +37,12 @@ public class GameController1 : MonoBehaviour
     void Start()
     {
         charController = GameObject.Find("Char").GetComponent<CharController>();
+        //videoPlayer.Prepare();
+        videoPlayer.prepareCompleted += vp =>
+        {
+            godViewer.SetActive(true);
+            vp.Play();
+        };
     }
     public void onSkillClick(int id)
     {
@@ -50,5 +71,57 @@ public class GameController1 : MonoBehaviour
     public void onAutoButtonClick()
     {
         SkillController.Instance.setAuto(!SkillController.Instance.getIsAuto());
+    }
+
+    public void openStat(int idx)
+    {
+        Time.timeScale = 0f;
+        for(int i=0;i<panels.Length;i++)
+        {
+            panels[i].SetActive(false);
+        }
+        panels[idx].SetActive(true);
+        godViewer.SetActive(false);
+        videoPlayer.Pause();
+        videoPlayer.frame = 0;
+        isPlaying = false;
+        videoPlayer.clip = null;
+
+        if(idx == 0)
+        {
+            initStatUIPanel();
+        }
+    }
+    public void closeStat()
+    {
+        Time.timeScale = 1f;
+        for (int i = 0; i < panels.Length; i++)
+        {
+            panels[i].SetActive(false);
+        }
+        godViewer.SetActive(false);
+        videoPlayer.Pause();
+        videoPlayer.frame = 0;
+        isPlaying = false;
+        videoPlayer.clip = null;
+    }
+
+
+    public void buff(int idx)
+    {
+        if (!isPlaying && videoPlayer.clip != clips[idx])
+        {
+            isPlaying = true;
+            videoPlayer.clip = clips[idx];
+            videoPlayer.Prepare();
+        }
+        
+    }
+
+
+    private void initStatUIPanel()
+    {
+        statPointText.text = $"{MyProfile.Instance.getSp():N0}";
+        diaText.text = $"{MyProfile.Instance.getDia():N0}";
     }
 }

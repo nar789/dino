@@ -11,8 +11,10 @@ public class MyProfile : MonoBehaviour
     int hp = 1000; //db
     float exp = 0f; //db 
     int level = 1; //db
-    int dia; //db
-    int sp = 0;  //db
+    int dia = 30000; //db
+    int sp = 2000000;  //db
+
+
     float str; //Èû  //db
     float dex; //ÀÌ¼Ó, ¹ÎÃ¸¼º  //db
     float con; //hpÅë Å©±â, Áö±¸·Â  //db
@@ -121,5 +123,15 @@ public class MyProfile : MonoBehaviour
     public int getHpCapa()
     {
         return hpCapa;
+    }
+
+    public int getSp()
+    {
+        return sp; 
+    }
+
+    public int getDia()
+    {
+        return dia;
     }
 }
