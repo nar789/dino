@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class CharController : MonoBehaviour
 {
 
-    public float speed = 15f;
+    //float speed = 7f;
     public FloatingJoystick joystick;
 
     public float horizonStep = 2f;
@@ -50,7 +50,6 @@ public class CharController : MonoBehaviour
 
         agent = GetComponent<NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
-
     }
 
     public void initHp(int capa, int cur)
@@ -72,6 +71,7 @@ public class CharController : MonoBehaviour
         {
 
             Vector3 moveDirection = new Vector3(-joystick.Horizontal, 0, -joystick.Vertical).normalized;
+            float speed = MyProfile.Instance.getStat(1) / 100;
             MoveAgent(moveDirection, speed);
             transform.LookAt(transform.position + moveDirection);
                         
@@ -153,7 +153,8 @@ public class CharController : MonoBehaviour
 
     public int getAttackPower()
     {
-        return attackPower;
+        int str = MyProfile.Instance.getStat(0) / 100;
+        return str;
     }
 
     public bool isAlive()
@@ -207,7 +208,6 @@ public class CharController : MonoBehaviour
     {
         StartCoroutine(playLevelUpFx());
     }
-
     IEnumerator playLevelUpFx()
     {
         GameObject fx = Instantiate(levelUpFx, transform.position, transform.rotation);

@@ -44,7 +44,8 @@ public class BoltController : MonoBehaviour
         if (other.CompareTag("enemy"))
         {
             isHit = true;
-            other.GetComponent<EnemyController>().hitRemote(10);
+            int str = MyProfile.Instance.getStat(0) / 100;
+            other.GetComponent<EnemyController>().hitRemote(str);
             Destroy(gameObject);
         }
     }

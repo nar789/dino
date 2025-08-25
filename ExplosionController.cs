@@ -41,7 +41,8 @@ public class ExplosionController : MonoBehaviour
                     }
 
                     EnemyController controller = col.GetComponent<EnemyController>();
-                    controller.hitRemote(attackPower * 4);
+                    float S = MyProfile.Instance.getStat(3) / 1000;
+                    controller.hitRemote(attackPower * 4 * S);
                 }
 
             }

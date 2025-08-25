@@ -31,6 +31,9 @@ public class EnemyController : MonoBehaviour
 
     public List<GameObject> fxObj = new List<GameObject>();
 
+    public delegate void Callback();
+    Callback onDieEnemy;
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -93,7 +96,7 @@ public class EnemyController : MonoBehaviour
     }
 
 
-    public void hit(int attackPower)
+    public void hit(float attackPower)
     {
         if (slider.value <= 0)
         {
@@ -105,7 +108,8 @@ public class EnemyController : MonoBehaviour
         if(SkillController.Instance.getSkill(1))
         {
             skill = 1;
-            attackPower *= 3;
+            float S = MyProfile.Instance.getStat(3) / 1000;
+            attackPower = attackPower * 3 * S;
         }
 
         if (slider.value - attackPower <= 0)
@@ -121,7 +125,7 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    public void hitRemote(int attackPower)
+    public void hitRemote(float attackPower)
     {
         if(slider.value <= 0)
         {
@@ -169,6 +173,15 @@ public class EnemyController : MonoBehaviour
                 DestroyImmediate(obj);
             }
         }
+        if(onDieEnemy != null)
+        {
+            onDieEnemy();
+        }
+    }
+
+    public void setOnDieEnemy(Callback callback)
+    {
+        onDieEnemy = callback;
     }
 
     public int getAttackPower()

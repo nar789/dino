@@ -24,6 +24,7 @@ public class CoinController : MonoBehaviour
         //StartCoroutine(startJump(level));
         Vector3 dest = target.position + Vector3.zero;
         dest.y = level * 0.2f;
+        GameController1.Instance.addGold();
         transform.DOJump(dest, 5, 1, 0.2f).OnComplete(() =>
         {
             transform.parent = target.parent;
@@ -33,6 +34,7 @@ public class CoinController : MonoBehaviour
 
     public void pay(Vector3 dest)
     {
+        GameController1.Instance.useGold();
         transform.DOJump(dest, 5, 1, 0.2f).OnComplete(() =>
         {
             Destroy(gameObject);

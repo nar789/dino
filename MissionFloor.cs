@@ -8,14 +8,16 @@ public class MissionFloor : MonoBehaviour
     public GameObject building;
     public GameObject startFx;
     public TMPro.TextMeshProUGUI goldInfo;
+    GameObject buildingInstance;
 
 
 
     int leftCoin = 10;
     int capa;
+    int[] capaList = {10, 100, 300, 500, 1000, 2000, 3000, 5000, 7000, 10000};
     void Start()
     {
-        capa = leftCoin = 10;
+        capa = leftCoin = capaList[MyProfile.Instance.getMissionLevel()];
         goldInfo.text = "0/" + capa;
     }
 
@@ -29,7 +31,7 @@ public class MissionFloor : MonoBehaviour
     {
         GameObject fx = Instantiate(startFx, transform.position, transform.rotation);
         yield return new WaitForSeconds(1);
-        Instantiate(building, transform.position, transform.rotation);
+        buildingInstance = Instantiate(building, transform.position, transform.rotation);
         yield return new WaitForSeconds(2);        
         DestroyImmediate(fx);
     }
@@ -39,11 +41,11 @@ public class MissionFloor : MonoBehaviour
         if(leftCoin > 0)
         {
             leftCoin -= 1;
-            Debug.Log("left coin " + leftCoin);
             goldInfo.text = capa - leftCoin + "/" + capa;
             if(startFx != null && building != null && leftCoin == 0)
             {
                 StartCoroutine(createBuilding());
+                GameController1.Instance.addBuildingCount();
             }
             return true;
         } else
@@ -51,5 +53,23 @@ public class MissionFloor : MonoBehaviour
             return false;
         }
         
+    }
+
+    IEnumerator clearBuilding()
+    {
+        GameObject fx = Instantiate(startFx, transform.position, transform.rotation);
+        yield return new WaitForSeconds(1);
+        DestroyImmediate(buildingInstance);
+        yield return new WaitForSeconds(2);
+        DestroyImmediate(fx);
+    }
+
+
+    public void clear()
+    {
+        StopAllCoroutines();
+        StartCoroutine(clearBuilding());
+        capa = leftCoin = capaList[MyProfile.Instance.getMissionLevel()];
+        goldInfo.text = capa - leftCoin + "/" + capa;
     }
 }

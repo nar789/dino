@@ -118,7 +118,8 @@ public class MagicController : MonoBehaviour
             Vector3 target = other.transform.position + Vector3.zero;
             target.y = 0.5f;
             StartCoroutine(BirthHitExp(target));
-            other.GetComponent<EnemyController>().hitRemote(attackPower * 5);
+            float S = MyProfile.Instance.getStat(3) / 1000;
+            other.GetComponent<EnemyController>().hitRemote(attackPower * 5 * S);
         }
     }
 }

@@ -15,18 +15,17 @@ public class MyProfile : MonoBehaviour
     int sp = 2000000;  //db
 
 
-    float str; //힘  //db
-    float dex; //이속, 민첩성  //db
-    float con; //hp통 크기, 지구력  //db
-    float inte; //마법 공격력, 지능  //db
+    int[] statLevel = {1, 1, 1, 1, 1 };
+    int[] stat = {1000, 700, 1000, 1000, 1000 };
 
 
     //local saved
-    int gold;
-    string missionStr = "0,0,0,0,0,0,0";
-    int gpm; //미션당 골드 gold per mission
-    int[] mission = { 0, 0, 0, 0, 0, 0, 0};
-    //미션 전체스테이지개수,스테이지번호,미션개수,미션수행여부
+    int gold = 0;
+    int missionLevel = 0;
+    int buildingCount = 0;
+    int[] totalBuildingCount = { 7, 12 };
+    
+    string[] missionName = {"석궁 건설", "석궁 건설"};
 
 
     //fixed constant
@@ -44,6 +43,8 @@ public class MyProfile : MonoBehaviour
 
     CharController charController;
 
+    bool[] buff = { false, false, false, false, false};
+
 
     private void Awake()
     {
@@ -56,14 +57,19 @@ public class MyProfile : MonoBehaviour
         expSlider.maxValue = 100;
         expSlider.value = exp;
         expText.text = exp.ToString("F2") + "%";
+        levelText.text = "Lv. " + level;
 
-        hpCapa = hp;
+        updateHpCapa();
+    }
+
+    public void updateHpCapa()
+    {
+        hpCapa = getStat(2);
+        //Debug.Log("hpCapa " + hpCapa);
         hpSlider.maxValue = hpCapa;
         hpSlider.value = hp;
         hpText.text = getHpString();
         charController.initHp(hpCapa, hp);
-
-        levelText.text = "Lv. " + level;
     }
 
     private string getHpString()
@@ -73,12 +79,7 @@ public class MyProfile : MonoBehaviour
         return hpStr + " / " + hpCapaStr;
     }
 
-    
-    void Update()
-    {
-        
-    }
-
+  
     public void updateExp()
     {
         exp += 30 * Mathf.Pow(expWeight, level - 1);
@@ -114,17 +115,6 @@ public class MyProfile : MonoBehaviour
         hpSlider.value = hp;
         hpText.text = getHpString();
     }
-
-    public int getHp()
-    {
-        return hp;
-    }
-
-    public int getHpCapa()
-    {
-        return hpCapa;
-    }
-
     public int getSp()
     {
         return sp; 
@@ -133,5 +123,156 @@ public class MyProfile : MonoBehaviour
     public int getDia()
     {
         return dia;
+    }
+
+    public int getStat(int idx)
+    {
+        int b = 0; 
+        
+        if(buff[idx])
+        {
+            b = (int)(stat[idx] * 0.1f);
+        }
+        //Debug.Log("idx " + idx + " / " + (stat[idx] + b) + " / " + buff[idx]);
+        return stat[idx] + b;
+    }
+
+    public int getStatLevel(int idx)
+    {
+        return statLevel[idx];
+    }
+
+    public bool useStatPoint()
+    {
+        if(sp > 0)
+        {
+            sp -= 1;
+            return true;
+        } else
+        {
+            return false;
+        }
+        
+    }
+
+    public void addDia(int amount)
+    {
+        dia += amount;
+    }
+
+    public bool useDia(int amount)
+    {
+        if(dia - amount >= 0)
+        {
+            dia -= amount;
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
+
+    public void levelUpStat(int idx)
+    {
+        //str, dex, con, inte, wis
+        statLevel[idx] += 1;
+
+      
+        if(idx == 0)
+        {
+            stat[0] += 100;
+        } else if(idx == 1)
+        {
+            stat[1] += 7;
+        } else if(idx == 2)
+        {
+            stat[2] += 100;
+            updateHpCapa();
+        } else if(idx == 3)
+        {
+            stat[idx] += 10;
+        } else if(idx == 4)
+        {
+            stat[idx] += 20;
+        }
+
+
+    }
+
+    public void setBuff(int idx, bool status)
+    {
+        buff[idx] = status;
+    }
+
+    public int getGold()
+    {
+        return gold;
+    }
+
+    public void addGold()
+    {
+        gold += 1;
+    }
+
+    public void useGold()
+    {
+        if (gold - 1 >= 0)
+        {
+            gold -= 1;
+        }
+    }
+
+    public int getTotalBuildingCount()
+    {
+        if(totalBuildingCount.Length <= missionLevel)
+        {
+            return totalBuildingCount[totalBuildingCount.Length - 1];
+        } else
+        {
+            return totalBuildingCount[missionLevel];
+        }
+        
+    }
+
+    public int getBuildingCount()
+    {
+        return buildingCount;
+    }
+
+    public string getMissionName()
+    {
+        if(missionName.Length <= missionLevel)
+        {
+            return missionName[missionName.Length - 1];
+        }
+        return missionName[missionLevel];
+    }
+
+    public void addBuildingCount()
+    {
+        if(buildingCount + 1 <= getTotalBuildingCount())
+        {
+            buildingCount += 1;
+        }
+    }
+
+    public bool addMissionLevelAndClearBuildingCount()
+    {
+        if(missionLevel + 1 < missionName.Length)
+        {
+            buildingCount = 0;
+            missionLevel += 1;
+            return true;
+        } else
+        {
+            buildingCount = 0;
+            missionLevel += 1;
+            return false;
+        }
+    }
+
+    public int getMissionLevel()
+    {
+        return missionLevel;
     }
 }
