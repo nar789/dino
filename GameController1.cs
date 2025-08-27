@@ -331,4 +331,11 @@ public class GameController1 : MonoBehaviour
             missionFloors[i].clear();
         }
     }
+
+
+    public void gameOver()
+    {
+        toast("게임 오버! 다시 부활합니다.", 2);
+        MyProfile.Instance.gameOver();
+    }
 }

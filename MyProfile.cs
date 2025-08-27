@@ -92,6 +92,9 @@ public class MyProfile : MonoBehaviour
             charController.startLevelUpFx();
             //get stat point 
             updateSp();
+            //heal the hp
+            hp = hpCapa;
+            updateHpCapa();
         }
         
         expSlider.value = exp;
@@ -102,6 +105,12 @@ public class MyProfile : MonoBehaviour
     {
         sp += Mathf.FloorToInt(Mathf.Pow(spWeight, level - 1));
         Debug.Log("sp : " + sp);
+    }
+
+    public void gameOver()
+    {
+        hp = hpCapa;
+        updateHpCapa();
     }
 
     public void updateHp(int attackPower)
@@ -180,13 +189,13 @@ public class MyProfile : MonoBehaviour
       
         if(idx == 0)
         {
-            stat[0] += 100;
+            stat[0] += 500;
         } else if(idx == 1)
         {
             stat[1] += 7;
         } else if(idx == 2)
         {
-            stat[2] += 100;
+            stat[2] += 1000;
             updateHpCapa();
         } else if(idx == 3)
         {

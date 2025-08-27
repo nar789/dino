@@ -6,7 +6,7 @@ public class DinoFactory : MonoBehaviour
 {
     public static DinoFactory Instance;
 
-    public GameObject dinoPrefab;
+    public GameObject[] dinoPrefab;
 
     public GameObject origin;
     public GameObject origin2;
@@ -41,7 +41,8 @@ public class DinoFactory : MonoBehaviour
     IEnumerator birth2()
     {
         yield return new WaitForSeconds(1);
-        EnemyController dino = Instantiate(dinoPrefab, origin2.transform.position, dinoPrefab.transform.rotation).GetComponent<EnemyController>();
+        GameObject prefab = getDinoPrefab();
+        EnemyController dino = Instantiate(prefab, origin2.transform.position, prefab.transform.rotation).GetComponent<EnemyController>();
         currentCount2 += 1;
         if (currentCount2 + 1 <= maxCount)
         {
@@ -56,7 +57,8 @@ public class DinoFactory : MonoBehaviour
     IEnumerator birth()
     {
         yield return new WaitForSeconds(1);
-        EnemyController dino = Instantiate(dinoPrefab, origin.transform.position, dinoPrefab.transform.rotation).GetComponent<EnemyController>();
+        GameObject prefab = getDinoPrefab();
+        EnemyController dino = Instantiate(prefab, origin.transform.position, prefab.transform.rotation).GetComponent<EnemyController>();
         currentCount += 1; 
         if(currentCount + 1 <= maxCount)
         {
@@ -81,6 +83,22 @@ public class DinoFactory : MonoBehaviour
         //Debug.Log("reborn() after 10 sec.");
         yield return new WaitForSeconds(9);
         StartCoroutine(birth2());
+    }
+
+    private GameObject getDinoPrefab()
+    {
+        int missionLevel = MyProfile.Instance.getMissionLevel();
+        if(missionLevel == 0)
+        {
+            return dinoPrefab[0];
+        } else if(missionLevel == 1)
+        {
+            return dinoPrefab[1];
+        } else
+        {
+            return dinoPrefab[Random.Range(0, dinoPrefab.Length)];
+        }
+        
     }
 
 

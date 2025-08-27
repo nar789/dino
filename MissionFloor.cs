@@ -14,7 +14,7 @@ public class MissionFloor : MonoBehaviour
 
     int leftCoin = 10;
     int capa;
-    int[] capaList = {10, 100, 300, 500, 1000, 2000, 3000, 5000, 7000, 10000};
+    int[] capaList = {10, 10, 10, 500, 1000, 2000, 3000, 5000, 7000, 10000};
     void Start()
     {
         capa = leftCoin = capaList[MyProfile.Instance.getMissionLevel()];

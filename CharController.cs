@@ -185,8 +185,11 @@ public class CharController : MonoBehaviour
         Debug.Log("die!");
         initAnimation();
         animator.SetBool(isDieHash, true);
-        yield return new WaitForSeconds(1);
-        //Destroy(gameObject);
+        yield return new WaitForSeconds(3);
+
+        animator.SetBool(isDieHash, false);
+        transform.position = new Vector3(0.57f, 0, -0.13f);
+        GameController1.Instance.gameOver();
 
     }
 

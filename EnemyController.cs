@@ -11,7 +11,10 @@ public class EnemyController : MonoBehaviour
       
     public Slider slider;
     int hp = 100;
-    int attackPower = 1;
+    const float hpWeight = 1.07f;
+    
+    int attackPower = 10;
+    const float attackPowerWeight = 1.2f;
 
     Animator animator;
     int attackHash;
@@ -40,13 +43,21 @@ public class EnemyController : MonoBehaviour
         attackHash = Animator.StringToHash("isAttack");
         runHash = Animator.StringToHash("isRun");
         dieHash = Animator.StringToHash("isDie");
-        slider.maxValue = hp;
-        slider.value = hp;
+        slider.maxValue = getHp();
+        slider.value = getHp();
 
         charTransform = GameObject.Find("Char").transform;
         attackTarget = charTransform.GetChild(3);
 
         agent = GetComponent<NavMeshAgent>();
+    }
+
+    private int getHp()
+    {
+        int missionLevel = MyProfile.Instance.getMissionLevel();
+        float hpf = hp * Mathf.Pow(hpWeight, missionLevel);
+        int hpi = Mathf.FloorToInt(hpf);
+        return hpi;
     }
 
     
@@ -186,7 +197,10 @@ public class EnemyController : MonoBehaviour
 
     public int getAttackPower()
     {
-        return attackPower;
+        int missionLevel = MyProfile.Instance.getMissionLevel();
+        float ap = attackPower * Mathf.Pow(attackPowerWeight, missionLevel);
+        int integer_ap = Mathf.FloorToInt(ap);
+        return integer_ap;
     }
 
 
